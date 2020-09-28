@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string-array name="muestras">
+            <item>10</item>
+            <item>50</item>
+            <item>100</item>
+            <item>150</item>
+            <item>200</item>
+            <item>250</item>
+            <item>300</item>
+            <item>400</item>
+            <item>500</item>
+            <item>1000</item>
+        </string-array>
+        <string-array name="numeroMuestras">
+            <item>10</item>
+            <item>50</item>
+            <item>100</item>
+            <item>150</item>
+            <item>200</item>
+            <item>250</item>
+            <item>300</item>
+            <item>400</item>
+            <item>500</item>
+            <item>1000</item>
+        </string-array>
+    <string-array name="pasos">
+        <item>100</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>5000</item>
+        <item>10000</item>
+        <item>20000</item>
+        <item>30000</item>
+        <item>40000</item>
+        <item>50000</item>
+
+    </string-array>
+    <string-array name="numeroPasos">
+        <item>100</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>5000</item>
+        <item>10000</item>
+        <item>20000</item>
+        <item>30000</item>
+        <item>40000</item>
+        <item>50000</item>
+    </string-array>
+</resources>

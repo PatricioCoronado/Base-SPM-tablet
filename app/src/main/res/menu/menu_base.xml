@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/ tools"
+    tools:context=".BaseActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <item android:title="versión soft. DUE"
+        android:id="@+id/version"
+        android:orderInCategory="5"/>
+    <item
+        android:id="@+id/cambio"
+        android:icon="@android:drawable/ic_menu_revert"
+        android:orderInCategory="15"
+        android:title="cambio"
+        app:showAsAction="always|collapseActionView" />
+
+    <item
+        android:id="@+id/error"
+        android:icon="@android:drawable/ic_menu_help"
+        android:orderInCategory="15"
+        android:title="error"
+        app:showAsAction="ifRoom|collapseActionView" />
+
+    <item
+        android:id="@+id/acelerometro"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:orderInCategory="10"
+        android:title="acelerómetro"
+        app:showAsAction="always|collapseActionView" />
+    <item
+        android:id="@+id/fotodiodo"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:orderInCategory="10"
+        android:title="fotodiodo"
+        app:showAsAction="always|collapseActionView" />
+
+    <item android:id="@+id/preferencias"
+        android:title="preferencias"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:orderInCategory="4"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/busca_bluetooth"
+        android:title="bluetooth"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:orderInCategory="4"
+        app:showAsAction="never"/>
+</menu>
+

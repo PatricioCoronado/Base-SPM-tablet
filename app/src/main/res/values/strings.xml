@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Base SPM</string>
+    <string name="text_boton_subir">subir</string>
+    <string name="text_boton_bajar">bajar</string>
+    <string name="text_boton_parar">parar</string>
+    <string name="texto_comando">*idn?</string>
+    <string name="texto_respuesta"></string>
+    <string name="error_conexion">No se ha podido conectar con la base, selecciona otro dispositivo</string>
+    <string name="nuevo_bluetooth">Selecciona otro dispositivo</string>
+    <string name="vel_motor">velocidad</string>
+    <string name="text_on"> </string>
+    <string name="text_off"> </string>
+</resources>

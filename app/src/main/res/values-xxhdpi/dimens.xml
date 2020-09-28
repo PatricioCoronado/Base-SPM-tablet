@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- El Redmi5plus 720x360 dp -->
+    <dimen name="texto_normal">14dp</dimen>
+    <dimen name="texto_grande">16sp</dimen>
+    <dimen name="largo_boton">88dp</dimen>
+    <dimen name="alto_boton">48dp</dimen>
+    <dimen name="text_boton">12sp</dimen>
+    <dimen name="android_width">64dp</dimen>
+    <dimen name="largo_texto_l">312dp</dimen>
+    <dimen name="alto_texto_l">48dp</dimen>
+    <dimen name="largo_texto_c">88dp</dimen>
+    <dimen name="alto_texto_c">48dp</dimen>
+    <dimen name="cuadro_grafico">240dp</dimen>
+    <dimen name="padding_grafico">8dp</dimen>
+    <dimen name="largo_etiqueta">82dp</dimen>
+    <dimen name="alto_etiqueta">32dp</dimen>
+    <dimen name="soporte_corto_base">352dp</dimen>
+    <dimen name="soporte_largo_base">452dp</dimen>
+    <!-- layout cabeza -->
+    <dimen name="boton_cuadrado">60dp</dimen>
+    <dimen name="boton_cuadrado_doble">120dp</dimen>
+    <dimen name="boton_cuadrado_mitad">30dp</dimen>
+    <dimen name="espacio_botones_corto">40dp</dimen>
+    <dimen name="espacio_botones_largo">80dp</dimen>
+    <dimen name="espacio_botones_medio">24dp</dimen>
+    <dimen name="espacio_vertical">16dp</dimen>
+    <dimen name="botones_velocidad">80dp</dimen>
+
+
+
+
+</resources>

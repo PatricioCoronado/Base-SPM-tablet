@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    android:key="preferencias_principal" >
+    <CheckBoxPreference
+        android:key="movimiento"
+        android:title="movimiento discreto"
+        android:summary="movimiento continuo o discreto de los motores (número de pasos determinado por 'pasos en movimiento discreto')"/>
+
+        <ListPreference
+        android:key="pasos"
+        android:title="pasos en movimiento discreto"
+        android:summary="número de pasos a dar en cada pulsación de marcha si está activado el checkbox 'movimiento discreto'.Por defecto 1000"
+        android:entries="@array/pasos"
+        android:entryValues="@array/numeroPasos"
+        android:defaultValue="1000"/>
+
+    <!--<EditTextPreference
+        android:key="muestrasAcelerometro"
+        android:title="nuestras enviadas por el acelerómetro"
+        android:summary="número de muestras leidas del acelerómetro enviadas por la base cuando se solicitan datos del acelerómetro"
+        android:inputType="number"
+        android:defaultValue="100"/>-->
+
+    <!--<PreferenceScreen android:title="muestras del acelerómetro">-->
+        <ListPreference
+            android:key="muestrasAcelerometro"
+            android:title="muestras del acelerómetro"
+            android:summary="número de muestras del acelerómetro que se envía en cada pulsación. Por defecto 100"
+            android:entries="@array/muestras"
+            android:entryValues="@array/numeroMuestras"
+            android:defaultValue="100"/>
+
+    <!--<PreferenceScreen muestras del fotodiodo-->
+    <ListPreference
+        android:key="muestrasFotodiodo"
+        android:title="muestras del fotodiodo"
+        android:summary="número de muestras del fotodiodo que se envía en cada pulsación. Por defecto 100"
+        android:entries="@array/muestras"
+        android:entryValues="@array/numeroMuestras"
+        android:defaultValue="100"/>
+
+    <!--</PreferenceScreen>-->
+    <EditTextPreference
+       android:key="mac"
+       android:title="MAC del bluetooth"
+       android:summary="Mac del Bluetooth que va a utilizar esta base"
+       android:inputType="text"
+       android:text="00:00:00:00:00:00"
+       android:defaultValue="00:00:00:00:00:00"/>
+</PreferenceScreen>
