@@ -1,4 +1,4 @@
-package com.segainvex.basesmptablet;
+package com.segainvex.basespmtablet;
 
 import org.junit.Test;
 

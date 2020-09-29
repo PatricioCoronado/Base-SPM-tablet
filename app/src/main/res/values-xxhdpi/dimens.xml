@@ -3,8 +3,8 @@
     <!-- El Redmi5plus 720x360 dp -->
     <dimen name="texto_normal">14dp</dimen>
     <dimen name="texto_grande">16sp</dimen>
-    <dimen name="largo_boton">88dp</dimen>
-    <dimen name="alto_boton">48dp</dimen>
+    <dimen name="largo_boton">104dp</dimen>
+    <dimen name="alto_boton">88dp</dimen>
     <dimen name="text_boton">12sp</dimen>
     <dimen name="android_width">64dp</dimen>
     <dimen name="largo_texto_l">312dp</dimen>

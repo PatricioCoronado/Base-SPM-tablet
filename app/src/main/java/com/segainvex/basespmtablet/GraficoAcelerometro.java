@@ -1,4 +1,4 @@
-package com.segainvex.mibluetooth;
+package com.segainvex.basespmtablet;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;

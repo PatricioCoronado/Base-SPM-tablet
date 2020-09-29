@@ -1,4 +1,4 @@
-package com.segainvex.mibluetooth;
+package com.segainvex.basespmtablet;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.os.Vibrator;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -222,6 +223,7 @@ public class BaseActivity extends AppCompatActivity
     @Override public boolean onOptionsItemSelected(MenuItem item)
     {
         int id = item.getItemId();
+        if (id == R.id.salir) {System.exit(0); return true;}
         if (id == R.id.error) {pideError(null); return true;}
         if (id == R.id.cambio) {conmutaBaseCabeza(null); return true;}
         if (id == R.id.version) {version(null);return true;}

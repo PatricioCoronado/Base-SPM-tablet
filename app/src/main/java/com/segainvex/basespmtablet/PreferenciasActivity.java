@@ -1,7 +1,6 @@
-package com.segainvex.mibluetooth;
+package com.segainvex.basespmtablet;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import com.segainvex.mibluetooth.PreferenciasFragment;
 
 public class PreferenciasActivity extends AppCompatActivity {
     @Override

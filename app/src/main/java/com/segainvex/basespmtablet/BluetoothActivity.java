@@ -1,9 +1,7 @@
-package com.segainvex.mibluetooth;
-import androidx.appcompat.app.AlertDialog;
+package com.segainvex.basespmtablet;
 import androidx.appcompat.app.AppCompatActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,7 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Set;
 /***************************************************************************
@@ -111,11 +108,11 @@ public class BluetoothActivity extends AppCompatActivity {
            }
         }
     }
-    /****************************************************************************
+    /**************************************************************************
      *  función OnClickListener para seleccionar un item de la lista de devices
      *  Si no ha encontrado la base que quiere controlar en la lista de devices
      *  tiene que pulsar un item de la lista para seleccionar algún device
-    *************************************************************************** */
+    ***************************************************************************/
      private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView av, View v, int arg2, long arg3) {
              //finishAffinity();
@@ -126,20 +123,20 @@ public class BluetoothActivity extends AppCompatActivity {
             startActivity(intend);
         }
     };
-/******************************************************************************
+/****************************************************************************
 * Guarda el device bluetooth seleccionado en preferencias
  *  @param device a guardar
-**************************************************************************** */
+****************************************************************************/
        private void salvaDeviceEnPrefefencias(BluetoothDevice device)
        {
            SharedPreferences.Editor editor = preferencias.edit();
            editor.putString("mac", device.getAddress());
            editor.apply();
        }
-    /****************************************************************************
+    /**************************************************************************
      *  función que comprueba el bluetooth del dispositivo y si no está
      *  habilitado lo habilita. Si no hay bluetooth en la tablet sale de la app
-     *************************************************************************** */
+     **************************************************************************/
     private void VerificarEstadoBT() {
         // Comprueba que el dispositivo tiene Bluetooth y que está encendido.
         mBtAdapter= BluetoothAdapter.getDefaultAdapter();

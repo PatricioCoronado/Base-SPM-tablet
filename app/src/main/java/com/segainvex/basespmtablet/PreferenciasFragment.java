@@ -1,10 +1,8 @@
-package com.segainvex.mibluetooth;
+package com.segainvex.basespmtablet;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 public class PreferenciasFragment extends PreferenceFragment {
 
     @Override

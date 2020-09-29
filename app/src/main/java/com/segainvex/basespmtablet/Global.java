@@ -1,4 +1,4 @@
-package com.segainvex.mibluetooth;
+package com.segainvex.basespmtablet;
 import android.app.Application;
 import android.bluetooth.BluetoothDevice;
 

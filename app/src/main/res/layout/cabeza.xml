@@ -117,8 +117,9 @@
             android:layout_column="2"
             android:onClick="botonMoverCabeza"
             android:textColor="@color/colorPrimary"
-            android:textOff="@string/text_off"
-            android:textOn="@string/text_on"
+            android:textAllCaps ="false"
+            android:textOff="fotod"
+            android:textOn="fotod"
             tools:layout_editor_absoluteX="391dp"
             tools:layout_editor_absoluteY="492dp" />
 
@@ -129,8 +130,9 @@
             android:layout_column="6"
             android:onClick="botonMoverCabeza"
             android:textColor="@color/colorPrimary"
-            android:textOff="@string/text_off"
-            android:textOn="@string/text_on"
+            android:textAllCaps ="false"
+            android:textOff="laser"
+            android:textOn="laser"
             tools:layout_editor_absoluteX="165dp"
             tools:layout_editor_absoluteY="492dp" />
     </GridLayout>

@@ -1,4 +1,4 @@
-package com.segainvex.basesmptablet;
+package com.segainvex.basespmtablet;
 
 import android.content.Context;
 
