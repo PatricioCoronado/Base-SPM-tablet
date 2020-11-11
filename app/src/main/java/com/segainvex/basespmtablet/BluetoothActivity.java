@@ -15,18 +15,16 @@ import android.widget.Toast;
 import java.util.Set;
 /***************************************************************************
 *    Activity que gestina los dispositivos bluetooth vinculados en el sistema
+ *   Esta es la activity inicial de la aplicación.
 ****************************************************************************/
 public class BluetoothActivity extends AppCompatActivity {
-    // Depuración de LOGCAT
-    SharedPreferences preferencias;
-    private static final String TAG = "BluetoothActivity";
-    Set <BluetoothDevice> dispositivosVinculados;//Set para contener devices bluetooht
+    SharedPreferences preferencias; //para cargar las preferencias de la app para consultarlas
+    private static final String TAG = "BluetoothActivity";//Para depuración
+    Set <BluetoothDevice> dispositivosVinculados;//Set para contener devices bluetooht vinculados
     BluetoothDevice[] btDevices;//Lista de Bluetooth devices
     ListView IdLista; //ListView para mostrar los dispositivos vinculados
-    // String que se enviara a la actividad principal, mainactivity
+    // String que se enviara a la actividad BaseActivity con la MAC del device a utilizar
     public static String MAC_ADDRESS = "device_address";
-
-    // Declaracion de campos
     private BluetoothAdapter mBtAdapter;
     private ArrayAdapter mPairedDevicesArrayAdapter;
     /**********************************************************************
@@ -35,20 +33,21 @@ public class BluetoothActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bluetooth);
+        setContentView(R.layout.activity_bluetooth);//Carga los recursos
         //Para ver la MAC de la base
         preferencias = PreferenceManager.getDefaultSharedPreferences(this);
     }
     /**********************************************************************
      * onActivityResult
+     * Acciones a relizar cuando la activity BaseActivity solicite un nuevo
+     * device bluetooth o le falle la conexión
      **********************************************************************/
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode,resultCode,data);
         //Si no se habilita el Bluetooth por el usuario salimos
-        int mensaje=R.string.nuevo_bluetooth;
+        int mensaje=R.string.nuevo_bluetooth; //Lee de los recursos un string con mensaje adecuado
         if (requestCode == Global.BASE_ACTIVITY)
         {
             if (resultCode == Global.NUEVO_BLUETOOTH)
@@ -57,12 +56,11 @@ public class BluetoothActivity extends AppCompatActivity {
             }
             if (resultCode == Global.FALLO_CONEXION)
             {
-               mensaje=R.string.error_conexion;
+               mensaje=R.string.error_conexion;//Lee de los recursos un string con mensaje adecuado
             }
             Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
         }
     }//onActivityResult
-
 /***************************************************************************
  * onResume
  * Crea una lista para mostrar los dispositivos vinculados para que el

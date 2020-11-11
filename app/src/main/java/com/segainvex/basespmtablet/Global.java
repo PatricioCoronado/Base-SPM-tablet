@@ -7,7 +7,7 @@ import android.bluetooth.BluetoothDevice;
 ************************************************ */
 class Global extends Application { //Clase estática de Android para variables globales
     //Tipos de respuesta que puede enviar Arduino
-    public interface TipoRespuesta //Se utiliza Ej: Global.TipoMensaje.PASOS
+    public interface TipoRespuesta //Se utiliza Ej: Global.TipoRespuesta.PASOS
     {
         public static final int LO_ENVIADO = 0; //El comando enviado
         public static final int SIN_FIRMA = 1; //Sin caracters previos
@@ -35,7 +35,7 @@ class Global extends Application { //Clase estática de Android para variables g
     public static final byte  CR = 13;//Retorno de carro '\r'
     public static final int MAX_LON_STRING = 64;
     public static int TIEMPO_VIBRACION = 50;
-    public static int VELOCIDAD_INICIAL=50;//Velocidad motores inicial
+    public static int VELOCIDAD_INICIAL=3;//Velocidad motores inicial
     public static final int BASE_ACTIVITY = 100;
     public static final int NUEVO_BLUETOOTH = 200;
     public static final int FALLO_CONEXION = 201;

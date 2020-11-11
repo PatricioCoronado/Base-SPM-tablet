@@ -15,15 +15,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.os.Vibrator;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -42,6 +44,7 @@ public class BaseActivity extends AppCompatActivity
     //Componentes comunes
     private TextView comando;
     private TextView respuesta;
+    private Spinner nPasos;//Para listar los pasos discretos en la pantalla principal de la APP
     //Componentes de la cabeza
     ConstraintLayout componentesCabeza;
     LinearLayout graficoXY;
@@ -49,8 +52,9 @@ public class BaseActivity extends AppCompatActivity
     private TextView fuerzaNormal;
     private TextView fuerzaLateral;
     private TextView suma;
-    private ToggleButton fotodiodoUp,fotodiodoDown,fotodiodoRight,fotodiodoLeft;
-    private ToggleButton laserUp,laserDown,laserRight,laserLeft;
+    private Button  botonContinuoDiscreto;
+    private ToggleButton cabezaUp,cabezaDown,cabezaRight,cabezaLeft;
+    private Button botonLaserFotodiodo;
     private SeekBar velocidadCabeza;
     //Componentes de la base
     ConstraintLayout componentesBase;
@@ -58,19 +62,21 @@ public class BaseActivity extends AppCompatActivity
     GraficoAcelerometro graficoBase;
     private TextView GX;//Para mostrar las coordenadas del acelerómetro
     private TextView GY;
-    private Button subir, bajar, parar;
+    private ToggleButton subir, bajar;
     private SeekBar velocidadBase;
     private Switch z1;
     private Switch z2;
     private Switch z3;
     //Variables
     //boolean despulsadoPorSoftware =false;//Para saber si se despulsa por software o lo hace usuario
+    private boolean modoContinuo=true;//Solo sirve para el botón botonContinuoDiscreto
     private int motorActivo;
     private int velocidadMotorBase;
     private int velocidadMotorCabeza;
-    private boolean  movimientoDiscreto;//True para moverse solo una cantidad de pasos
+    private boolean  movimientoDiscreto;//Para una cantidad de pasos discreta. Se actualiza con las preferencias
     private boolean baseActivaCabezaInactiva=true;//Para mostrar los controes de base o cabeza
     private int pasosMovimientoDiscreto;//Pasos a dar en movimiento discreto
+    private boolean laserCabeza=true;
     //Componentes Bluetooth
     BluetoothAdapter miBluetoothAdapter =null;//La radio Bluetooth de aparato
     BluetoothDevice miDevice = null;//Bluetooth device que representa el dispositivo remoto
@@ -95,6 +101,30 @@ public class BaseActivity extends AppCompatActivity
         //Vibración de los botones
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         //Componentes comunes además del toolbar y el menú
+        //..........Inicio de la gestión del spinner nPasos..........................
+        nPasos = (Spinner)findViewById(R.id.n_pasos);//Lista con el número de pasos a dar en discreto
+        ArrayAdapter<String> nPasosAdapter = new ArrayAdapter<String>(this, //ArrayAdapter del spinner
+                android.R.layout.simple_spinner_dropdown_item,
+                getResources().getStringArray(R.array.pasos));
+        nPasos.setAdapter(nPasosAdapter);
+        //Listener para seleccionar un valor del spinner nPasos y actualizar las preferencias
+        nPasos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {//Métodos de la interfaz que hay que implementar
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                String seleccion = (String) parentView.getItemAtPosition(position).toString();
+                SharedPreferences.Editor editor = preferencias.edit();//Objeto editor de preferencias
+                editor.putString("pasos",seleccion);//Escribe la selección
+                editor.apply();//Aplica el editor
+            }
+            @Override public void onNothingSelected(AdapterView<?> parentView){}});
+        //Ahora establezco el valor por defecto del spinner nPasos
+        String seleccion = preferencias.getString("pasos","100");//Lee el valor de las preferencias
+        int nPasosPosicion = nPasosAdapter.getPosition(seleccion);//Encuentra la posición de ese valor
+        nPasos.setSelection(nPasosPosicion);//Establece el valor encontrado en el spinner nPasos
+        //..........Fin de la gestión del spinner nPAsos..........................
+        botonContinuoDiscreto = (Button) findViewById(R.id.continuo_discreto);
         comando = (TextView) findViewById(R.id.comando);//Texto para ver el comando enviado
         respuesta = (TextView) findViewById(R.id.respuesta);//Texto con la respuesta de la base
         //Componentes de la cabeza
@@ -102,14 +132,11 @@ public class BaseActivity extends AppCompatActivity
         fuerzaNormal= (TextView) findViewById(R.id.fuerza_normal);//Para mostrar las señales del fotodiodo
         fuerzaLateral= (TextView) findViewById(R.id.fuerza_lateral);
         suma= (TextView) findViewById(R.id.suma);
-        fotodiodoUp = (ToggleButton) findViewById(R.id.fotodiodo_up);//Botones de motores de la cabeza
-        fotodiodoDown = (ToggleButton) findViewById(R.id.fotodiodo_down);
-        fotodiodoRight = (ToggleButton) findViewById(R.id.fotodiodo_right);
-        fotodiodoLeft = (ToggleButton) findViewById(R.id.fotodiodo_left);
-        laserUp = (ToggleButton) findViewById(R.id.laser_up);
-        laserDown = (ToggleButton) findViewById(R.id.laser_down);
-        laserRight = (ToggleButton) findViewById(R.id.laser_right);
-        laserLeft = (ToggleButton) findViewById(R.id.laser_left);
+        cabezaUp = (ToggleButton) findViewById(R.id.cabeza_up);//Botones de motores de la cabeza
+        cabezaDown = (ToggleButton) findViewById(R.id.cabeza_down);
+        cabezaRight = (ToggleButton) findViewById(R.id.cabeza_right);
+        cabezaLeft = (ToggleButton) findViewById(R.id.cabeza_left);
+        botonLaserFotodiodo = (Button) findViewById(R.id.laser_fotodiodo);
         velocidadCabeza = (SeekBar) findViewById(R.id.velocidad_cabeza);//Selección de velocidad
         //Gráfico de la cabeza
         graficoXY = (LinearLayout) findViewById(R.id.grafico_xy);
@@ -120,9 +147,8 @@ public class BaseActivity extends AppCompatActivity
         GX= (TextView) findViewById(R.id.textViewX);
         GY= (TextView) findViewById(R.id.textViewY);
         //enviar = (Button) findViewById(R.id.enviar);
-        subir = (Button) findViewById(R.id.subir);
-        parar = (Button) findViewById(R.id.parar);
-        bajar = (Button) findViewById(R.id.bajar);
+        subir = (ToggleButton) findViewById(R.id.subir);
+        bajar = (ToggleButton) findViewById(R.id.bajar);
         z1 = (Switch) findViewById(R.id.swZ1);
         z2 = (Switch) findViewById(R.id.swZ2);
         z3 = (Switch) findViewById(R.id.swZ3);
@@ -132,20 +158,20 @@ public class BaseActivity extends AppCompatActivity
         velocidadBase.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
-                progress+=1;//Para que con 0 sea 10, con 10, 20...y con 50, 60
-                velocidadMotorBase = progress*10;
+                //progress puede valer o, 1,2,3,4,5 y 6
+                velocidadMotorBase=velocidadMotor(progress);
             }
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-            public void onStopTrackingTouch(SeekBar seekBar){}
+            public void onStartTrackingTouch(SeekBar seekBar) {}//Método no utilizado
+            public void onStopTrackingTouch(SeekBar seekBar){}//Método no utilizado
         });
-        //Velocidad seekbar y listeners asociados
+        //Velocidad de la cabeza seekbar y listeners asociados
         velocidadMotorCabeza=Global.VELOCIDAD_INICIAL;//El seekBar debe estar en esa posición
         velocidadCabeza = (SeekBar) findViewById(R.id.velocidad_cabeza);
         velocidadCabeza.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
-                progress+=1;//Para que con 0 sea 10, con 10, 20...y con 50, 60
-                velocidadMotorCabeza = progress*10;
+                //progress puede valer o, 1,2,3,4,5 y 6
+                velocidadMotorCabeza=velocidadMotor(progress);
             }
             public void onStartTrackingTouch(SeekBar seekBar) {}
             public void onStopTrackingTouch(SeekBar seekBar){}
@@ -154,6 +180,19 @@ public class BaseActivity extends AppCompatActivity
         graficoZ = (LinearLayout) findViewById(R.id.grafico_z);
         graficoBase = new GraficoAcelerometro(this);
         graficoZ.addView(graficoBase);
+        // El botón de movimiento continuo/discreto hay que actualizarlo según las preferencias
+        //guardadas
+        movimientoDiscreto = preferencias.getBoolean("movimiento_discreto",false);
+        if(movimientoDiscreto) {
+            botonContinuoDiscreto.setText("discreto");
+            nPasos.setVisibility(View.VISIBLE);//Si está en discreto muestra el spinner nPasos
+            modoContinuo=false;
+        }
+            else {
+            botonContinuoDiscreto.setText("continuo");
+            nPasos.setVisibility(View.INVISIBLE);//Si está en continuo no muestra el spinner nPasos
+            modoContinuo=true;
+        }
         /*****************************************************************
          * Gestión del mensaje recibido
          * Handler para recibir mensajes del thread del bluetooth
@@ -203,14 +242,14 @@ public class BaseActivity extends AppCompatActivity
                         //TODO indicar en algún sitio la versión del software del DUE
                         break;
                     case Global.TipoRespuesta.STOP:
-                        desactivaBotonesCabeza();//Si recibo un stop de motores desacticvo botones
+                        desactivaBotonesCabezaBase();//Si recibo un stop de motores desacticvo botones
                         //respuesta.setText("motor parado");
                         break;
                 }
             }
         };
     }//onCreate
-    /**********************************************************************
+   /**********************************************************************
      *                        Inflado del menú
      * *******************************************************************/
     @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -248,8 +287,6 @@ public class BaseActivity extends AppCompatActivity
         //O desde onPause
         VerificarEstadoBT();//Si desde onPause se ha desactivado el bluetooth hay que verificarlo
         miDevice=Global.deviceBase;
-
-
         // Cancela cualquier  discovery en proceso
         miBluetoothAdapter.cancelDiscovery();//Cancel cualquier busqueda en proceso
         //Ahora hay que conectar
@@ -289,19 +326,19 @@ public class BaseActivity extends AppCompatActivity
      * Botón subir y bajar: Envía a la base el comando..
      * "MOT:MMP <MotorActivo Resolucion Frecuencia Sentido Pasos>"
      *********************************************************************/
-    public void moverBase(View view)
+    public void moverBase(ToggleButton view)
     {
             int sentido=0;
             //El  sentido depende del botón pulsado
             if(view.equals(bajar)) sentido=0; else sentido = 1;
-            //Busca el motor activo
+            //Busca el motor que hay que activar según los switches de selección de motores Z
             motorActivo = motorBaseActivo();//Lee el motor seleccionado
             if(motorActivo==0) {
                 Toast.makeText(this, "no hay motor seleccionado", Toast.LENGTH_SHORT).show();
                 return;
             }
             //Preferencias. Tipo de movimiento y pasos discretos
-            movimientoDiscreto = preferencias.getBoolean("movimiento",false);
+            movimientoDiscreto = preferencias.getBoolean("movimiento_discreto",false);
             if(movimientoDiscreto)
             {
                 String pasosDiscretos =  preferencias.getString("pasos","10000");
@@ -312,6 +349,7 @@ public class BaseActivity extends AppCompatActivity
             {
                 enviaElComando("MOT:MM " + motorActivo + " 256 " + velocidadMotorBase + " "+ sentido +"\r");
             }
+        view.setChecked(true);//Cambia el aspecto del botón para distinguirlo
     }
     /********************************************************************
      * Método para seleccionar el motor activo a partir de los switches
@@ -334,53 +372,71 @@ public class BaseActivity extends AppCompatActivity
         return 0;
     }
     /*********************************************************************
-     * Metodo para para motores.  Envía a la base el comando "MOT:MP 0"
+     * Metodo para parar motores.  Envía a la base el comando "MOT:MP 0"
      *********************************************************************/
-    public void pararCabeza()
+    public void pararMotor()
     {
         //Si se ha despulsado un botón de la cabeza el usuario si se envía el comando
         enviaElComando("MOT:MP 0\r");
         //Desactiva todos los botones
-        desactivaBotonesCabeza();
+        desactivaBotonesCabezaBase();
     }
     /*********************************************************************
-     * Método que desactiva los pulsadores de la cabeza
+     * Método que desactiva los pulsadores de la cabeza y de la base
     ********************************************************************* */
-    private void desactivaBotonesCabeza()
+    private void desactivaBotonesCabezaBase()
     {
-        fotodiodoUp.setActivated(false);
-        fotodiodoDown.setActivated(false);
-        fotodiodoRight.setActivated(false);
-        fotodiodoLeft.setActivated(false);
-        laserUp.setActivated(false);
-        laserDown.setActivated(false);
-        laserRight.setActivated(false);
-        laserLeft.setActivated(false);
-        fotodiodoUp.setChecked(false);
-        fotodiodoDown.setChecked(false);
-        fotodiodoRight.setChecked(false);
-        fotodiodoLeft.setChecked(false);
-        laserUp.setChecked(false);
-        laserDown.setChecked(false);
-        laserRight.setChecked(false);
-        laserLeft.setChecked(false);
+        cabezaUp.setActivated(false);
+        cabezaDown.setActivated(false);
+        cabezaRight.setActivated(false);
+        cabezaLeft.setActivated(false);
+        cabezaUp.setChecked(false);
+        cabezaDown.setChecked(false);
+        cabezaRight.setChecked(false);
+        cabezaLeft.setChecked(false);
+        subir.setChecked(false);
+        bajar.setChecked(false);
+        subir.setActivated(false);
+        bajar.setActivated(false);
+    }
+    /**********************************************************************
+     * Métodos llamdo cuando se pulsa el botón para mover el
+     * fotodiodo o el laser. Cambia la variable laserCabeza, si
+     * es true moverá el laser y si es false moverá el fotodiodo.
+     * Primero para motor por si estuviera alguno en movimiento.
+     **********************************************************************/
+    public void laserFotodiodo(View view)
+    {
+        pararMotor();
+        if(laserCabeza){
+            laserCabeza=false;
+            cabezaUp.setTextOn("fotodiodo");
+            cabezaUp.setTextOff("fotodiodo");
+            cabezaUp.setText("fotodiodo");
+        }
+        else{
+            laserCabeza=true;
+            cabezaUp.setTextOn("laser");
+            cabezaUp.setTextOff("laser");
+            cabezaUp.setText("laser");
+        }
     }
     /**********************************************************************
      * Métodos llamdo cuando se pulsa un botón en la cabeza
      **********************************************************************/
     public void botonMoverCabeza(View botonPulsado)
     {
-        if(botonPulsado.isActivated())
+        if(botonPulsado.isActivated())//Si el botón esta activado hay que desactivarlo
         {
-            pararCabeza();
-            botonPulsado.setActivated(false);
+            pararMotor();//Primero para motores
+            botonPulsado.setActivated(false);//Segundo desactiva el botón
         }
-        else
+        else //S el botón estaba desactivado hay que pasarlo a activado
         {
-            desactivaBotonesCabeza();//Desactiva todos los botones
-            botonPulsado.setActivated(true);//Activa el pulsado
-            moverCabeza((ToggleButton) botonPulsado);
-            botonPulsado.setActivated(true);
+            desactivaBotonesCabezaBase();//Desactiva todos los botones
+            //botonPulsado.setActivated(true);//Activa solo el botón pulsado
+            moverCabeza((ToggleButton) botonPulsado);//Pasamos el botón a la función moverCabeza
+            botonPulsado.setActivated(true);//Ponenos dicho botón como activado
         }
     }
     /*********************************************************************
@@ -389,18 +445,30 @@ public class BaseActivity extends AppCompatActivity
     public void moverCabeza(ToggleButton view)
     {
         int sentidoCabeza=0;
-        view.setChecked(true);
+        view.setChecked(true);//Cambia el aspecto del botón para distinguirlo
         //Selección de motor y sentido
-        if(view.equals(fotodiodoUp)){sentidoCabeza=1;motorActivo=Global.fotodiodoY;}
-        else if(view.equals(fotodiodoDown)){sentidoCabeza=0;motorActivo=Global.fotodiodoY;}
-        else if(view.equals(fotodiodoLeft)){sentidoCabeza=1;motorActivo=Global.fotodiodoX;}
-        else if(view.equals(fotodiodoRight)){sentidoCabeza=0;motorActivo=Global.fotodiodoX;}
-        else if(view.equals(laserUp)){sentidoCabeza=1;motorActivo=Global.laserY;}
-        else if(view.equals(laserDown)){sentidoCabeza=0;motorActivo=Global.laserY;}
-        else if(view.equals(laserRight)){sentidoCabeza=1;motorActivo=Global.laserX;}
-        else if(view.equals(laserLeft)){sentidoCabeza=0;motorActivo=Global.laserX;}
+        if(view.equals(cabezaUp)){
+            sentidoCabeza=1;
+            if(laserCabeza)motorActivo=Global.laserY;
+            else motorActivo=Global.fotodiodoY;
+        }
+        else if(view.equals(cabezaDown)){
+            sentidoCabeza=0;
+            if(laserCabeza)motorActivo=Global.laserY;
+            else motorActivo=Global.fotodiodoY;
+        }
+        else if(view.equals(cabezaLeft)){
+            sentidoCabeza=1;
+            if (laserCabeza)motorActivo=Global.laserX;
+            else motorActivo=Global.fotodiodoX;
+        }
+        else if(view.equals(cabezaRight)){
+            sentidoCabeza=0;
+            if (laserCabeza)motorActivo=Global.laserX;
+            else motorActivo=Global.fotodiodoX;
+        }
         //Preferencias. Tipo de movimiento y pasos a dar
-        movimientoDiscreto = preferencias.getBoolean("movimiento",false);
+        movimientoDiscreto = preferencias.getBoolean("movimiento_discreto",false);
         if(movimientoDiscreto)
         {
             String pasosDiscretos =  preferencias.getString("pasos","10000");
@@ -410,6 +478,26 @@ public class BaseActivity extends AppCompatActivity
         else //Movimiento continuo
         {
             enviaElComando("MOT:MM " + motorActivo + " 256 " + velocidadMotorCabeza + " "+ sentidoCabeza +"\r");
+        }
+    }
+    /**********************************************************************
+     * Métodos llamdo cuando se pulsa un botón en la base
+     * Aquí se procesa la activacón o desactivación del botón
+     * y se llama a pararMotor o a moverBase
+     **********************************************************************/
+    public void botonMoverBase(View botonPulsado)
+    {
+        if(botonPulsado.isActivated())//Si el botón esta activado hay que desactivarlo
+        {
+            pararMotor();//Primero para motores
+            botonPulsado.setActivated(false);//Segundo desactiva el botón
+        }
+        else //Si el botón estaba desactivado hay que pasarlo a activado
+        {
+            desactivaBotonesCabezaBase();//Desactiva todos los botones
+            botonPulsado.setActivated(true);//Activa solo el botón pulsado
+            moverBase((ToggleButton) botonPulsado);//Pasamos el botón a la función moverBase
+            botonPulsado.setActivated(true);//Ponenos dicho botón como activado
         }
     }
     /*********************************************************************
@@ -489,6 +577,33 @@ public class BaseActivity extends AppCompatActivity
             Log.d(TAG, "...Bluetooth Desactivado...");//Está correcto
         }
     }
+
+    /**********************************************************************
+     * Método que da servicio al botón de cambio de movimiento continuo a
+     * discreto. Modifica el campo "movimiento_discreto" en las preferencias
+
+     * ********************************************************************/
+    public void cambiaContinuoDiscreto(View view)
+    {
+        if(modoContinuo)
+        {
+            botonContinuoDiscreto.setText("discreto");
+            modoContinuo=false;
+            SharedPreferences.Editor editor = preferencias.edit();
+            editor.putBoolean("movimiento_discreto",true);
+            editor.apply();
+            nPasos.setVisibility(View.VISIBLE);//Si está en discreto muestra el spinner nPasos
+        }
+        else
+        {
+            botonContinuoDiscreto.setText("continuo");
+            modoContinuo=true;
+            SharedPreferences.Editor editor = preferencias.edit();
+            editor.putBoolean("movimiento_discreto",false);
+            nPasos.setVisibility(View.INVISIBLE);//Si no está en discreto oculta el spinner nPasos
+            editor.apply();
+        }
+    }
     /*********************************************************************
      *                  Métodos del menú
     ******************************************************************* */
@@ -502,10 +617,12 @@ public class BaseActivity extends AppCompatActivity
         startActivity(intentPreferencias);
     }
     /*********************************************************************
-     * Item del menú: Cambio entre activity de control de base o cabeza
+     * Item del menú: Cambio entre activity de control de base o cabeza.
+     * Primero para motor por si alguno estubiera en marcha.
      *********************************************************************/
     public void conmutaBaseCabeza(View view)
     {
+        pararMotor();
         if(baseActivaCabezaInactiva) {
             componentesCabeza.setVisibility(View.VISIBLE);
             componentesBase.setVisibility(View.INVISIBLE);
@@ -552,7 +669,6 @@ public class BaseActivity extends AppCompatActivity
         int muestrasFotodiodo = Integer.parseInt(muestrasString);
         enviaElComando("MOT:IFO "+ muestrasFotodiodo +" \r");
     }
-
     /*********************************************************************
      * Item del menú busca_bluetooth. Devuelve el control a la
      * actividad del Bluetooth
@@ -567,16 +683,48 @@ public class BaseActivity extends AppCompatActivity
         finish();//Regresa al BluetoothActivity para que busque un nuevo device bluetooth
     }
     /*********************************************************************
-     * Envía el comando que recibe en un string
+     * Envía el comando al socket del bluetooht.
+     * Recibe como argumento  un string con el comando
      *********************************************************************/
     private boolean enviaElComando(String comand)
     {
         vibrator.vibrate(Global.TIEMPO_VIBRACION);//Hace una vibración
         comando.setText(comand);//Muestra el comando
-        miThread.write(comand.getBytes());//Envía el comando
+        miThread.write(comand.getBytes());//Envía el comando convertido a array de bytes
         return true;
     }
-
+    /***********************************************************************
+     * Establece la velocidad en función del seekbar de la base o de
+     * la cabeza
+     ********************************************************************* */
+    private int velocidadMotor(int valorSeekbar) {
+        int velocidad=1;//Por defecto 1 KHz
+        switch(valorSeekbar) {
+            case 0:
+                velocidad = 1; //1KHz
+                break;
+            case 1:
+                velocidad = 3; //3KHz
+                break;
+            case 2:
+                velocidad = 5; //5KHz
+                break;
+            case 3:
+                velocidad = 10; //10KHz
+                break;
+            case 4:
+                velocidad = 20; //20KHz
+                break;
+            case 5:
+                velocidad = 30; //30KHz
+                break;
+            case 6:
+                velocidad = 60; //60KHz
+                break;
+            default: velocidad=1;break;
+        }
+        return velocidad;
+    }
 /***************************************************************************
 ****************************************************************************/
 }//class

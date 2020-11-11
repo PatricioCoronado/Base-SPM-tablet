@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     android:key="preferencias_principal" >
     <CheckBoxPreference
-        android:key="movimiento"
+        android:key="movimiento_discreto"
         android:title="movimiento discreto"
         android:summary="movimiento continuo o discreto de los motores (número de pasos determinado por 'pasos en movimiento discreto')"/>
 

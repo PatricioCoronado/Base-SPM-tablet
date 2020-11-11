@@ -18,9 +18,9 @@
     <dimen name="soporte_corto_base">352dp</dimen>
     <dimen name="soporte_largo_base">452dp</dimen>
     <!-- layout cabeza -->
-    <dimen name="boton_cuadrado">60dp</dimen>
+    <dimen name="boton_cuadrado">120dp</dimen>
     <dimen name="boton_cuadrado_doble">120dp</dimen>
-    <dimen name="boton_cuadrado_mitad">30dp</dimen>
+    <dimen name="boton_cuadrado_mitad">60dp</dimen>
     <dimen name="espacio_botones_corto">40dp</dimen>
     <dimen name="espacio_botones_largo">80dp</dimen>
     <dimen name="espacio_botones_medio">24dp</dimen>

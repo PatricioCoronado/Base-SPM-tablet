@@ -6,44 +6,68 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+/************************************************************************
+ *  Es un objeto que hereda de Thread para funcionar en un hilo
+ *  independiente del principal
+************************************************************************ */
 public class ConnectedThread extends Thread
 {
         private AppCompatActivity miActivity;
         Handler miHandler;
-        private static final String TAG = "THREAD_TAG";
-        private final BluetoothSocket mmSocket;//Para poder cerrar el sochet
+        private static final String TAG = "THREAD_TAG";//Para depuración
+        private final BluetoothSocket mmSocket;//Para socket abierto
         // streams de entrada y salida
         private final InputStream miInStream;
         private final OutputStream miOutStream;
-        //Constructor
+        /*****************************************************************************
+            Constructor
+            Argumentos de entrada del constructor
+            Eo objeto thread necesita conocer:
+            El socket, el objeto conexión para el flujo de datos
+            la activity a la que pertenece el objeto
+            El handle que va a recibir los mensajes
+        * ***************************************************************************/
         public ConnectedThread(BluetoothSocket socket,AppCompatActivity activity,Handler handler)
         {
-            miActivity = activity;
+            miActivity = activity;//Actividad que demanda el servicio
             miHandler = handler;
-            mmSocket = socket;
-            InputStream tmpIn = null;
-            OutputStream tmpOut = null;
-            // Get the input and output streams; using temp objects because
-            // member streams are final.
+            mmSocket = socket;//Conxón abierta
+            InputStream tmpIn = null;//Stream temporal para leer la entrada
+            OutputStream tmpOut = null;//Stream tempral para la salida
+            // Test del socket y los streams
             try {
                 tmpIn = socket.getInputStream();
             } catch (IOException e) {
-                Log.e(TAG, "Error occurred when creating input stream", e);
+                Log.e(TAG, "Error al crear el stream de entradd stream", e);
             }
             try {
                 tmpOut = socket.getOutputStream();
             } catch (IOException e) {
-                Log.e(TAG, "Error occurred when creating output stream", e);
+                Log.e(TAG, "Error al crear el stream de salida", e);
             }
+            //Una vez que ha probado los stream, los copia los objetos stream definitivos
             miInStream = tmpIn;
             miOutStream = tmpOut;
         }//Fin Constructor
+        /*********************************************************************
+         * run del thread. Método que hay que implementar ya que es abstracto
+         * de la clase Thread.
+         * Aquí se realiza la tarea principal del thread. En este caso se
+         * lee del socket del bluetooth.
+         * Si hay bytes disponibles en el stream de entrada se leen. Se busca
+         * el terminador en lo leido, si no está se añade lo leido al buffer
+         * y si encuentra el terminador añade lo leido al buffer y envía el
+         * array de bytes al handler definido en la actividad llamadora
+         * mediante el método obtainMessage del handler pasado como
+         * parámetro al thread.
+        ******************************************************************* */
         public void run()
         {
-            byte terminador = Global.LF;//Para identificar el final de cadena
+            byte terminador = Global.LF;//Terminador para identificar el final de cadena
             //Arduino envía como terminador 13 10 = CR LF
-            int longitudBuffer = 0;//Para recorrer el buffer de lectura
-            byte[] Buffer = new byte[1024];//Buffer de lectura, para guardar los bytes leidos
+            int longitudBuffer = 0;//Para recorrer el buffer de lectura e indica lo longitud final
+            byte[] Buffer = new byte[1024];//Buffer de lectura, la cadena final leida
+            //Bucle infinito para leer el socket
             while (true)
             {
                 try
@@ -52,13 +76,13 @@ public class ConnectedThread extends Thread
                     //Si hay datos..
                     if (bytesEnStream > 0)
                     {
-                        byte[] caracteres = new byte[bytesEnStream];
-                        miInStream.read(caracteres);//los lee en caracteres
-                        //Recorre el array de bytes leido
+                        byte[] caracteres = new byte[bytesEnStream];//Array sobre el que leer
+                        miInStream.read(caracteres);//lee en caracteres
+                        //Recorre el array de bytes leido buscando el terminador
                         for(int i=0;i<bytesEnStream;i++)
                         {
                             byte caracter = caracteres[i];//Lee un byte
-                            if(caracter == terminador) //Si es el delimitador ya tiene la respuesta completa
+                            if(caracter == terminador) //Si es el terminador ya tiene la respuesta completa
                             {
                                 byte[] bytesRespuesta = new byte[longitudBuffer];//Crea un arry intermedio
                                 //Pone el Buffer en bytesRespuesta 
@@ -97,11 +121,10 @@ public class ConnectedThread extends Thread
                                         break;
                                 }//switch
                                 // Una vez determinado el tipo de respuesta de Arduino la envía a la UI
-                                //miHandler.obtainMessage( firma, longitudBuffer, -1, strRespuesta).sendToTarget();
                                 miHandler.obtainMessage( firma, longitudBuffer, -1, bytesRespuesta).sendToTarget();
                                 longitudBuffer = 0;//Resetea el índice del Buffer
                             }//if(b == terminador)
-                            else //Si no es el delimitador simplemente añade el byte al buffer de lectura
+                            else //Si no es el terminador simplemente añade el byte al buffer de lectura
                             {
                                 Buffer[longitudBuffer++] = caracter;//Guarda el caracter y aumenta la longitudBuffer
                             }
@@ -111,36 +134,41 @@ public class ConnectedThread extends Thread
                 catch (IOException ex){break;}
             }//While(true)
         }//run
-        // Call this from the main activity to send data to the remote device.
+        /******************************************************************
+         * Envía datos a través del bluetooth desde el thread
+         * Recibe como argumento el array de bytes a enviar
+        * ****************************************************************/
         public void write(byte[] bytes)
         {
             try {
                 miOutStream.write(bytes);
 
-                // Share the sent message with the UI activity.
-                //Message comandoEnviado = miHandler.obtainMessage(Global.TipoMensaje.PASOS, -1, -1, bytes);
+                // Se puede enviar el comando enviado a la Actividad (no probado)
+                //Message comandoEnviado = //Crea el mensaje de retorno
+                // miHandler.obtainMessage(Global.TipoRespuesta.LO_ENVIADO, -1, -1, bytes);
                 //comandoEnviado.sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Error occurred when sending data", e);
 
-                // Send a failure message back to the activity.
-                //Message writeErrorMsg =
-                //        miHandler.obtainMessage(Global.TipoMensaje.PASOS);
+                //Devuelve mensaje de error a la actividad llamadora (no probado)
+                //Message mensajeDeError =
+                //miHandler.obtainMessage(Global.TipoRespuesta.ERROR);
                 //Bundle bundle = new Bundle();
-                //bundle.putString("toast","Couldn't send data to the other device");
-                //writeErrorMsg.setData(bundle);
-                //miHandler.sendMessage(writeErrorMsg);
+                //bundle.putString("toast","No se pudieron enviar los datos");
+                //mensajeDeError.setData(bundle);
+                //miHandler.sendMessage(mensajeDeError);
             }
         }//Write
-        /**********************************************************
-        * Cierra la conexión Bluetooth
-        ************************************************************/
+        /*****************************************************************
+        * Cierra la conexión Bluetooth que se le pasa al thread como
+         * parámetro.
+        ******************************************************************/
         public void desconectaBluetooth()
         {
             try {
                 mmSocket.close();
             } catch (IOException e) {
-                Log.e(TAG, "Could not close the connect socket", e);
+                Log.e(TAG, "No se pudo cerrar el socket", e);
             }
         }
 }
@@ -164,6 +192,7 @@ public class ConnectedThread extends Thread
         #define FACELEROMETRO      "LC" //pc_acelerometro(void);
         #define FVERSION           "KK" //pc_version(void);
         #define FIDN               "DW" //void idnSCPI(void);
-        #define FSTOP              "ZT" //Mensaje de parada. Se envía para informar de parada de motor
+        #define FSTOP              "ZT" //Informa de parada de motor
         #define FBLUETOOTHESTADO   "YY"   //void  bluetooth_estado(void)
+
 */

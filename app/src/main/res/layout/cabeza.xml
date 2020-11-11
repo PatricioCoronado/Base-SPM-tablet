@@ -7,22 +7,22 @@
     android:layout_height="match_parent"
     android:visibility="invisible">
 
+    <!-- seleción de velocidad  -->
+
     <LinearLayout
         android:id="@+id/grafico_xy"
 
         style="@style/grafico"
         android:layout_width="360dp"
         android:layout_height="320dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toTopOf="@+id/fuerza_normal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.554"
+        app:layout_constraintHorizontal_bias="0.604"
         app:layout_constraintStart_toStartOf="parent">
 
 
     </LinearLayout>
-
-    <!-- seleción de velocidad  -->
 
     <TextView
 
@@ -55,11 +55,11 @@
     <SeekBar
         android:id="@+id/velocidad_cabeza"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="353dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="512dp"
-        android:max="5"
-        android:progress="4"
+        android:layout_width="495dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="508dp"
+        android:max="6"
+        android:progress="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,71 +69,42 @@
         android:id="@+id/gridLayout"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/velocidad_cabeza"
         app:layout_constraintTop_toBottomOf="@+id/velocidad_cabeza">
 
         <TableRow
             android:layout_width="@dimen/boton_cuadrado_mitad"
-            android:layout_height="@dimen/boton_cuadrado" />
+            android:layout_height="@dimen/boton_cuadrado_mitad" />
 
         <TableRow
             android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
+            android:layout_height="@dimen/boton_cuadrado_mitad" />
 
         <TableRow
             android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
+            android:layout_height="@dimen/boton_cuadrado_mitad" />
 
         <TableRow
             android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
+            android:layout_height="@dimen/boton_cuadrado_mitad" />
 
         <TableRow
             android:layout_width="@dimen/boton_cuadrado_mitad"
-            android:layout_height="@dimen/boton_cuadrado" />
-
-        <TableRow
-            android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
-
-        <TableRow
-            android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
-
-        <TableRow
-            android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
-
-        <TableRow
-            android:layout_width="@dimen/boton_cuadrado_mitad"
-            android:layout_height="@dimen/boton_cuadrado" />
+            android:layout_height="@dimen/boton_cuadrado_mitad" />
 
         <ToggleButton
-            android:id="@+id/fotodiodo_up"
+            android:id="@+id/cabeza_up"
             style="@style/boton_cabeza"
             android:layout_row="0"
             android:layout_column="2"
             android:onClick="botonMoverCabeza"
             android:textColor="@color/colorPrimary"
-            android:textAllCaps ="false"
-            android:textOff="fotod"
-            android:textOn="fotod"
-            tools:layout_editor_absoluteX="391dp"
-            tools:layout_editor_absoluteY="492dp" />
 
-        <ToggleButton
-            android:id="@+id/laser_up"
-            style="@style/boton_cabeza"
-            android:layout_row="0"
-            android:layout_column="6"
-            android:onClick="botonMoverCabeza"
-            android:textColor="@color/colorPrimary"
-            android:textAllCaps ="false"
             android:textOff="laser"
             android:textOn="laser"
-            tools:layout_editor_absoluteX="165dp"
+            tools:layout_editor_absoluteX="391dp"
             tools:layout_editor_absoluteY="492dp" />
     </GridLayout>
 
@@ -141,48 +112,32 @@
         android:id="@+id/gridLayout3"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="24dp"
+        app:layout_constraintStart_toStartOf="@+id/velocidad_cabeza"
         app:layout_constraintTop_toBottomOf="@+id/gridLayout">
 
         <TableRow
             android:layout_width="@dimen/boton_cuadrado_mitad"
-            android:layout_height="@dimen/boton_cuadrado" />
+            android:layout_height="@dimen/boton_cuadrado_mitad" />
 
         <TableRow
             android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
+            android:layout_height="@dimen/boton_cuadrado_mitad" />
 
         <TableRow
             android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
+            android:layout_height="@dimen/boton_cuadrado_mitad" />
 
         <TableRow
             android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
+            android:layout_height="@dimen/boton_cuadrado_mitad" />
 
         <TableRow
             android:layout_width="@dimen/boton_cuadrado_mitad"
-            android:layout_height="@dimen/boton_cuadrado" />
-
-        <TableRow
-            android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
-
-        <TableRow
-            android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
-
-        <TableRow
-            android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
-
-        <TableRow
-            android:layout_width="@dimen/boton_cuadrado_mitad"
-            android:layout_height="@dimen/boton_cuadrado" />
+            android:layout_height="@dimen/boton_cuadrado_mitad" />
 
         <ToggleButton
-            android:id="@+id/fotodiodo_left"
+            android:id="@+id/cabeza_left"
             style="@style/boton_cabeza"
             android:layout_row="0"
             android:layout_column="1"
@@ -194,7 +149,7 @@
             tools:layout_editor_absoluteY="548dp" />
 
         <ToggleButton
-            android:id="@+id/fotodiodo_right"
+            android:id="@+id/cabeza_right"
             style="@style/boton_cabeza"
             android:layout_height="match_parent"
             android:layout_row="0"
@@ -206,89 +161,40 @@
             tools:layout_editor_absoluteX="436dp"
             tools:layout_editor_absoluteY="548dp" />
 
-        <ToggleButton
-            android:id="@+id/laser_right"
-            style="@style/boton_cabeza"
-            android:layout_row="0"
-            android:layout_column="7"
-            android:onClick="botonMoverCabeza"
-            android:textColor="@color/colorPrimary"
-            android:textOff="@string/text_off"
-            android:textOn="@string/text_on"
-            tools:layout_editor_absoluteX="258dp"
-            tools:layout_editor_absoluteY="548dp" />
 
-        <ToggleButton
-            android:id="@+id/laser_left"
-            style="@style/boton_cabeza"
-            android:layout_row="0"
-            android:layout_column="5"
-            android:onClick="botonMoverCabeza"
-            android:textColor="@color/colorPrimary"
-            android:textOff="@string/text_off"
-            android:textOn="@string/text_on"
-            tools:layout_editor_absoluteX="125dp"
-            tools:layout_editor_absoluteY="548dp" />
     </GridLayout>
 
     <GridLayout
         android:id="@+id/gridLayout2"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="24dp"
+        app:layout_constraintStart_toStartOf="@+id/velocidad_cabeza"
         app:layout_constraintTop_toBottomOf="@+id/gridLayout3">
 
         <TableRow
             android:layout_width="@dimen/boton_cuadrado_mitad"
-            android:layout_height="@dimen/boton_cuadrado" />
+            android:layout_height="@dimen/boton_cuadrado_mitad" />
 
         <TableRow
             android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
+            android:layout_height="@dimen/boton_cuadrado_mitad" />
 
         <TableRow
             android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
+            android:layout_height="@dimen/boton_cuadrado_mitad" />
 
         <TableRow
             android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
+            android:layout_height="@dimen/boton_cuadrado_mitad" />
 
         <TableRow
             android:layout_width="@dimen/boton_cuadrado_mitad"
-            android:layout_height="@dimen/boton_cuadrado" />
+            android:layout_height="@dimen/boton_cuadrado_mitad" />
 
-        <TableRow
-            android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
-
-        <TableRow
-            android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
-
-        <TableRow
-            android:layout_width="@dimen/boton_cuadrado"
-            android:layout_height="@dimen/boton_cuadrado" />
-
-        <TableRow
-            android:layout_width="@dimen/boton_cuadrado_mitad"
-            android:layout_height="@dimen/boton_cuadrado" />
 
         <ToggleButton
-            android:id="@+id/laser_down"
-            style="@style/boton_cabeza"
-            android:layout_row="0"
-            android:layout_column="6"
-            android:onClick="botonMoverCabeza"
-            android:textColor="@color/colorPrimary"
-            android:textOff="@string/text_off"
-            android:textOn="@string/text_on"
-            tools:layout_editor_absoluteX="165dp"
-            tools:layout_editor_absoluteY="604dp" />
-
-        <ToggleButton
-            android:id="@+id/fotodiodo_down"
+            android:id="@+id/cabeza_down"
             style="@style/boton_cabeza"
             android:layout_row="0"
             android:layout_column="2"
@@ -299,6 +205,16 @@
             tools:layout_editor_absoluteX="391dp"
             tools:layout_editor_absoluteY="604dp" />
     </GridLayout>
+
+    <Button
+        android:id="@+id/laser_fotodiodo"
+        style="@style/boton"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="16dp"
+        android:onClick="laserFotodiodo"
+        android:text="cambio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gridLayout2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

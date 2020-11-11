@@ -21,11 +21,18 @@
         app:titleTextColor="#FFFFFF" />
 
 <!-- Parte variable -->
-    <include layout="@layout/base" />
-    <include layout="@layout/cabeza" />
+    <include
+        layout="@layout/base"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-   <!-- Fin parte variable -->
+    <!-- Fin parte variable -->
+
+    <include
+        layout="@layout/cabeza"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"  />
 
     <TextView
         android:id="@+id/comando"
@@ -43,5 +50,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/continuo_discreto"
+        style="@style/boton"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="80dp"
+        android:onClick="cambiaContinuoDiscreto"
+        android:text="continuo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar" />
+
+    <Spinner
+        android:id="@+id/n_pasos"
+        android:layout_width="112dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/continuo_discreto" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
