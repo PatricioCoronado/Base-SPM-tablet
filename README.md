@@ -9,7 +9,7 @@
 
 # IMAGENES DEL PROYECTO
 ##
-![base](https://github.com/PatricioCoronado/Base-SPM-tablet/blob/V2/imagenes/imagen1.png "control de motores Z")
-![cabeza](https://github.com/PatricioCoronado/Base-SPM-tablet/blob/V2/imagenes/imagen2.png "control de motores de la cabeza")
+![base](https://github.com/PatricioCoronado/Base-SPM-tablet/blob/V2/imagenes/imagen1A.png "control de motores Z")
+![cabeza](https://github.com/PatricioCoronado/Base-SPM-tablet/blob/V2/imagenes/imagen2B.png "control de motores de la cabeza")
 
 
