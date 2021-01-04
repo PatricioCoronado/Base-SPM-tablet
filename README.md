@@ -7,7 +7,7 @@
 ## Proyecto relacionado [Base SPM con Arduino DUE](https://github.com/PatricioCoronado/Base-SPM-Arduino-DUE)
 ## Desarrollado con Android Studio 4.0.1
 
-# IMAGENES DEL PROYECTO
+# IMÁGENES DEL PROYECTO
 ##
 ![base](https://github.com/PatricioCoronado/Base-SPM-tablet/blob/V2/imagenes/imagen1A.png "control de motores Z")
 ![cabeza](https://github.com/PatricioCoronado/Base-SPM-tablet/blob/V2/imagenes/imagen2B.png "control de motores de la cabeza")
