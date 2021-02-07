@@ -6,6 +6,8 @@
 ## Desarrollado por SEGAINVEX-Electrónica para el [Departamento de Física de la Materia Condensada de la UAM](https://www.fmc.uam.es/research/nano-spm-lab/)
 ## Proyecto relacionado [Base SPM con Arduino DUE](https://github.com/PatricioCoronado/Base-SPM-Arduino-DUE)
 ## Desarrollado con Android Studio 4.0.1
+# Desgarga de la app para instalar en una tablet de una tablet de 1024X600
+## [App Base SPM](https://github.com/PatricioCoronado/Base-SPM-tablet/blob/V2/app/release/app-release.apk)
 
 # IMÁGENES DEL PROYECTO
 ##
