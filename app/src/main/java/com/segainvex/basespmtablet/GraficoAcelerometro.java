@@ -8,6 +8,7 @@ Esta clase extiende de un view.
 **************************************************************** */
 public class GraficoAcelerometro extends View {
     //paint
+    private final int grosorPincel=6;
     Paint pincel,pincelRojo;
     //Variables para la cuadrícula central los ejes y el punto
     private int n=11;//Tiene que ser impar
@@ -28,7 +29,7 @@ public class GraficoAcelerometro extends View {
         if(noInicializado) {
             //Inicialización de componentes y valores
             pincel = new Paint();
-            pincel.setStrokeWidth(6);
+            pincel.setStrokeWidth(grosorPincel);
             pincel.setARGB(64, 0, 0, 200);
             pincelRojo = new Paint();
             pincelRojo.setStrokeWidth(4);
@@ -61,10 +62,19 @@ public class GraficoAcelerometro extends View {
      **********************************************************/
     public void punto(float gx, float gy)
     {
+        x0= (int) (XM*gx+XM2)-grosorPincel/2;//Hay que restarle la mitad
+        y0= (int) (YM2-YM*gy)-grosorPincel/2;//del setStrokeWidth del pincel
+       //Limites
+        if (x0<0)x0=0;
+        if (y0<0)y0=0;
+        if (x0>XM)x0=XM;
+        if (y0>YM)y0=YM;
+        /*
         float x= XMXM *gx+ XM2;
         float y= YMYM *gy+ YM2;
         x0= (int) x;
         y0= (int) y;
+        */
     }
 }
 /*************************************************************/

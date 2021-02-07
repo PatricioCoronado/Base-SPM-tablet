@@ -44,8 +44,11 @@ class GraficoFotodiodo extends View {
         canvas.drawRGB(255, 255, 255);//Fondo blanco
         canvas.drawLine(XM/2, 0, XM/2,YM, pincelFino);//Eje vertical
         canvas.drawLine(0, YM/2, XM,YM/2, pincelFino);//Eje horizontal
-        canvas.drawLine(0, fn0, XM,fn0, pincelRojo);
-        canvas.drawLine(fl0, 0, fl0,YM, pincelRojo);
+        //canvas.drawLine(0, fn0, XM,fn0, pincelRojo);
+        canvas.drawLine( fn0,0, fn0,YM, pincelRojo);
+        //canvas.drawLine(fl0, 0, fl0,YM, pincelRojo);
+        canvas.drawLine(0,fl0, XM,fl0, pincelRojo);
+
         canvas.drawLine(XM,sum0,XM,YM, pincelGrueso);
     }
     /***********************************************************
@@ -53,6 +56,12 @@ class GraficoFotodiodo extends View {
      **********************************************************/
     public void cruces(float fn, float fl, float sum)
     {
+        sum = Math.abs(sum);
+        fn0= (int) ((XM/2) *(1+fl/12.0));
+        fl0= (int) ((YM/2) *(1-fn/12.0));
+        sum0 = (int) (YM *(1-sum/12.0));
+    /*
+
         float div1=2;
         float diff=1;
         float div2=24;
@@ -62,6 +71,8 @@ class GraficoFotodiodo extends View {
         fl0= (int)x;
         fn0= (int)y;
         sum0 = (int) z;
+
+     */
     }
 }
 /***************************************************************/
